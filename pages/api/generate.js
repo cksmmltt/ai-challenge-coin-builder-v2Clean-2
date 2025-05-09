@@ -7,6 +7,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export default async function handler(req, res) {
+  // ✅ Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Only POST requests allowed' });
   }
@@ -23,9 +24,11 @@ export default async function handler(req, res) {
   };
 
   try {
-    const frontImage = await generateImage(frontPrompt);
-    const backImage = await generateImage(backPrompt);
+    // ✅ Generate front and back images
+    const frontImage = await generateImage(frontPrompt || 'eagle on a flag');
+    const backImage = await generateImage(backPrompt || 'badge and motto');
 
+    // ✅ Calculate price and delivery
     const price = quantity * 5;
     const delivery = quantity > 500 ? 30 : 14;
 
